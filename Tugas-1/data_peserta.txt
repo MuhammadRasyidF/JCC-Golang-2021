@@ -1,0 +1,6 @@
+Data Peserta Jabar Coding Camp Golang
+1. Nama: Muhammad Rasyid Fadlurrahman
+2. Email: rasyid201101@gmail.com
+3. Sistem Operasi yang digunakan: WIndows 11
+4. Akun Gitlab/Github: MuhammadRasyidF (github)
+5. Akun Telegram: mrf_mra
