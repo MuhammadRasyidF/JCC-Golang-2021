@@ -90,31 +90,44 @@ func main() {
 	Luas := make(chan float64, 3)
 	Keliling := make(chan float64, 3)
 	Volume := make(chan float64, 3)
+	var jariJari = []float64{8, 14, 20}
 
-	go luasLingkaran(8, Luas)
-	go luasLingkaran(14, Luas)
-	go luasLingkaran(20, Luas)
+	// go luasLingkaran(8, Luas) //coding yang dulu
+	// go luasLingkaran(14, Luas)
+	// go luasLingkaran(20, Luas)
 
-	go kelilingLingkaran(8, Keliling)
-	go kelilingLingkaran(14, Keliling)
-	go kelilingLingkaran(20, Keliling)
+	// go kelilingLingkaran(8, Keliling)
+	// go kelilingLingkaran(14, Keliling)
+	// go kelilingLingkaran(20, Keliling)
 
-	go volumeTabung(8, 10, Volume)
-	go volumeTabung(14, 10, Volume)
-	go volumeTabung(20, 10, Volume)
+	// go volumeTabung(8, 10, Volume)
+	// go volumeTabung(14, 10, Volume)
+	// go volumeTabung(20, 10, Volume)
 
-	fmt.Printf("Luas Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(8), <-Luas)
-	fmt.Printf("Luas Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(14), <-Luas)
-	fmt.Printf("Luas Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(20), <-Luas)
-	fmt.Println()
-	fmt.Printf("Keliling Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(8), <-Keliling)
-	fmt.Printf("Keliling Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(14), <-Keliling)
-	fmt.Printf("Keliling Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(20), <-Keliling)
-	fmt.Println()
-	fmt.Printf("Volume Tabung dengan jari-jari %.0f dan tinggi %.0f adalah %.0f\n", float64(8), float64(10), <-Volume)
-	fmt.Printf("Volume Tabung dengan jari-jari %.0f dan tinggi %.0f adalah %.0f\n", float64(14), float64(10), <-Volume)
-	fmt.Printf("Volume Tabung dengan jari-jari %.0f dan tinggi %.0f adalah %.0f\n", float64(20), float64(10), <-Volume)
-	fmt.Println()
+	// fmt.Printf("Luas Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(8), <-Luas)
+	// fmt.Printf("Luas Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(14), <-Luas)
+	// fmt.Printf("Luas Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(20), <-Luas)
+	// fmt.Println()
+	// fmt.Printf("Keliling Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(8), <-Keliling)
+	// fmt.Printf("Keliling Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(14), <-Keliling)
+	// fmt.Printf("Keliling Lingkaran dengan jari-jari %.0f adalah %.0f\n", float64(20), <-Keliling)
+	// fmt.Println()
+	// fmt.Printf("Volume Tabung dengan jari-jari %.0f dan tinggi %.0f adalah %.0f\n", float64(8), float64(10), <-Volume)
+	// fmt.Printf("Volume Tabung dengan jari-jari %.0f dan tinggi %.0f adalah %.0f\n", float64(14), float64(10), <-Volume)
+	// fmt.Printf("Volume Tabung dengan jari-jari %.0f dan tinggi %.0f adalah %.0f\n", float64(20), float64(10), <-Volume)
+	// fmt.Println()
+
+	for _, JariJari := range jariJari { //update codinhg lebih simple
+		go luasLingkaran(JariJari, Luas)
+		fmt.Printf("Luas Lingkaran dengan jari-jari %.0f adalah %.0f\n", JariJari, <-Luas)
+
+		go kelilingLingkaran(8, Keliling)
+		fmt.Printf("Keliling Lingkaran dengan jari-jari %.0f adalah %.0f\n", JariJari, <-Keliling)
+
+		go volumeTabung(JariJari, 10, Volume)
+		fmt.Printf("Volume Tabung dengan jari-jari %.0f dan tinggi %.0f adalah %.0f\n\n", JariJari, float64(10), <-Volume)
+
+	}
 
 	//soal 4
 	fmt.Println("---soal 4---")
