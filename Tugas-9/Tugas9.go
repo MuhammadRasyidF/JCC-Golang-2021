@@ -48,7 +48,26 @@ func catch() {
 	}
 }
 
+// func no 3
+func tambahAngka(tambah int, angka *int) {
+	*angka += tambah
+}
+
 func main() {
+	// soal no 3
+	angka := 1
+	tambahAngka(7, &angka)
+	defer println(angka)
+
+	tambahAngka(6, &angka)
+	defer println(angka)
+
+	tambahAngka(-1, &angka)
+	defer println(angka)
+
+	tambahAngka(9, &angka)
+	defer println(angka)
+
 	// soal no 1
 	defer printKalimat("Candradimuka Jabar Coding Camp", 2021)
 
@@ -81,4 +100,5 @@ func main() {
 	} else {
 		fmt.Println(err.Error())
 	}
+
 }
