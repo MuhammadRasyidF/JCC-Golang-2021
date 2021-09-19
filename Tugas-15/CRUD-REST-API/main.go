@@ -15,8 +15,8 @@ import (
 
 func main() {
 	router := httprouter.New()
-	router.GET("/movie", GetMovie)
-	router.POST("/movie/create", PostMovie)
+	router.GET("/TotalNilaiMahasiswa", GetMovie)
+	router.POST("/NilaiMahasiswa", PostMovie)
 	router.PUT("/movie/:id/update", UpdateMovie)
 	router.DELETE("/movie/:id/delete", DeleteMovie)
 
@@ -48,7 +48,7 @@ func PostMovie(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	var mov models.Movie
+	var mov models.NilaiMahasiswa
 	if err := json.NewDecoder(r.Body).Decode(&mov); err != nil {
 		utils.ResponseJSON(w, err, http.StatusBadRequest)
 		return
@@ -73,7 +73,7 @@ func UpdateMovie(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	var mov models.Movie
+	var mov models.NilaiMahasiswa
 
 	if err := json.NewDecoder(r.Body).Decode(&mov); err != nil {
 		utils.ResponseJSON(w, err, http.StatusBadRequest)

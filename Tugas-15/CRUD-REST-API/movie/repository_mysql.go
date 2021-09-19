@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"time"
 )
 
 const (
@@ -16,16 +15,18 @@ const (
 	layoutDateTime = "2006-01-02 15:04:05"
 )
 
+var specialID uint = 125
+
 // GetAll
-func GetAll(ctx context.Context) ([]models.Movie, error) {
-	var movies []models.Movie
+func GetAll(ctx context.Context) ([]models.NilaiMahasiswa, error) {
+	var movies []models.NilaiMahasiswa
 	db, err := config.MySQL()
 
 	if err != nil {
 		log.Fatal("Cant connect to MySQL", err)
 	}
 
-	queryText := fmt.Sprintf("SELECT * FROM %v Order By created_at DESC", table)
+	queryText := fmt.Sprintf("SELECT * FROM %v Order By Nama DESC", table)
 	rowQuery, err := db.QueryContext(ctx, queryText)
 
 	if err != nil {
@@ -33,27 +34,18 @@ func GetAll(ctx context.Context) ([]models.Movie, error) {
 	}
 
 	for rowQuery.Next() {
-		var movie models.Movie
-		var createdAt, updatedAt string
-		if err = rowQuery.Scan(&movie.ID,
-			&movie.Title,
-			&movie.Year,
-			&createdAt,
-			&updatedAt); err != nil {
+		specialID += 12
+		var movie models.NilaiMahasiswa
+		if err = rowQuery.Scan(
+			&movie.ID,
+			&movie.MataKuliah,
+			&movie.Nama,
+			&movie.Nilai); err != nil {
 			return nil, err
 		}
 
 		//  Change format string to datetime for created_at and updated_at
-		movie.CreatedAt, err = time.Parse(layoutDateTime, createdAt)
-
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		movie.UpdatedAt, err = time.Parse(layoutDateTime, updatedAt)
-		if err != nil {
-			log.Fatal(err)
-		}
+		movie.ID = uint(specialID)
 
 		movies = append(movies, movie)
 	}
@@ -61,15 +53,16 @@ func GetAll(ctx context.Context) ([]models.Movie, error) {
 }
 
 // Insert Movie
-func Insert(ctx context.Context, movie models.Movie) error {
+func Insert(ctx context.Context, movie models.NilaiMahasiswa) error {
 	db, err := config.MySQL()
 	if err != nil {
 		log.Fatal("Can't connect to MySQL", err)
 	}
 
-	queryText := fmt.Sprintf("INSERT INTO %v (title, year, created_at, updated_at) values('%v',%v, NOW(), NOW())", table,
-		movie.Title,
-		movie.Year)
+	queryText := fmt.Sprintf("INSERT INTO %v (Nama, MataKuliah, ID) values('%s',%s, %d)", table,
+		movie.Nama,
+		movie.MataKuliah,
+		movie.ID)
 	_, err = db.ExecContext(ctx, queryText)
 
 	if err != nil {
@@ -79,18 +72,17 @@ func Insert(ctx context.Context, movie models.Movie) error {
 }
 
 // Update Movie
-func Update(ctx context.Context, movie models.Movie, id string) error {
+func Update(ctx context.Context, movie models.NilaiMahasiswa, id string) error {
 	db, err := config.MySQL()
 	if err != nil {
 		log.Fatal("Can't connect to MySQL", err)
 	}
 
-	queryText := fmt.Sprintf("UPDATE %v set title ='%s', year = %d, updated_at = NOW() where id = %s",
+	queryText := fmt.Sprintf("UPDATE %v set Nama ='%s',  MataKuliah = %s, ID = %d",
 		table,
-		movie.Title,
-		movie.Year,
-		id,
-	)
+		movie.Nama,
+		movie.MataKuliah,
+		movie.ID)
 
 	_, err = db.ExecContext(ctx, queryText)
 	if err != nil {
@@ -126,4 +118,21 @@ func Delete(ctx context.Context, id string) error {
 	}
 
 	return nil
+}
+
+func MakeIndexNilai(N uint) string {
+	switch {
+	case N >= 80:
+		return "A"
+	case N >= 70 && N < 80:
+		return "B"
+	case N >= 60 && N < 70:
+		return "C"
+	case N >= 50 && N < 60:
+		return "D"
+	case N < 50:
+		return "E"
+	default:
+		return "Tidak ada nilai"
+	}
 }
